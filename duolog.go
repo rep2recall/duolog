@@ -86,8 +86,11 @@ func (f *Duolog) New() error {
 		}
 	}
 
-	f0, err := os.Create(f.Filename)
-	f.target = f0
+	var err error
+
+	if f.Filename != "" {
+		f.target, err = os.Create(f.Filename)
+	}
 
 	return err
 }
