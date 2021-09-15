@@ -67,27 +67,27 @@ func isObject(s string) bool {
 	return len(s) >= 2 && s[0] == '{' && s[len(s)-1] == '}'
 }
 
-func (w Duolog) Logger() *log.Logger {
-	return log.New(w, "", log.LstdFlags)
+func (f *Duolog) Logger() *log.Logger {
+	return log.New(f, "", log.LstdFlags)
 }
 
-func New(filename string, cfg Duolog) (Duolog, error) {
-	if !cfg.NoColor {
-		if cfg.Formatter == "" {
-			cfg.Formatter = "terminal256"
+func (f *Duolog) New() error {
+	if !f.NoColor {
+		if f.Formatter == "" {
+			f.Formatter = "terminal256"
 		}
 
-		if cfg.Lexer == "" {
-			cfg.Lexer = "JSON"
+		if f.Lexer == "" {
+			f.Lexer = "JSON"
 		}
 
-		if cfg.Theme == "" {
-			cfg.Theme = "paraiso-dark"
+		if f.Theme == "" {
+			f.Theme = "paraiso-dark"
 		}
 	}
 
-	f, err := os.Create(filename)
-	cfg.target = f
+	f0, err := os.Create(f.Filename)
+	f.target = f0
 
-	return cfg, err
+	return err
 }
