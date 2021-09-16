@@ -1,6 +1,7 @@
 package duolog
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"net/url"
@@ -51,8 +52,14 @@ func (f Duolog) Write(p []byte) (n int, err error) {
 	if f.NoColor {
 		fmt.Print(s)
 	} else {
-		if err := quick.Highlight(os.Stdout, s, f.Lexer, f.Formatter, f.Theme); err != nil {
+		var buf bytes.Buffer
+		err := quick.Highlight(&buf, s, f.Lexer, f.Formatter, f.Theme)
+
+		if err != nil {
 			log.New(os.Stderr, "error: ", log.LstdFlags).Println(err)
+			fmt.Print(s)
+		} else {
+			fmt.Print(buf.String())
 		}
 	}
 
